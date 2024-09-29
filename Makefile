@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -std=c99
-BIN = jedit
+BIN = bin/jedit
 
 all: $(BIN)
 

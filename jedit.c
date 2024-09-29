@@ -281,7 +281,7 @@ void editor_update_syntax(Erow *row){
                     memset(&row->hl[i], HL_MLCOMMENT, mce_len);
                     i += mce_len;
                     in_comment = 0;
-                    prev_sep = 0;
+                    prev_sep = 1;
                     continue;
                 } else{
                     i++;
@@ -484,7 +484,7 @@ void editor_del_row(int at){
     if (at < 0 || at >= E.num_rows) return;
     editor_free_row(&E.row[at]);
     memmove(&E.row[at], &E.row[at + 1], sizeof(Erow) * (E.num_rows - at - 1));
-    for (int j = at; j < E.num_rows - 1; j++) E.row[j].idx++;
+    for (int j = at; j < E.num_rows - 1; j++) E.row[j].idx--;
     E.num_rows--;
     E.dirty++;
 }

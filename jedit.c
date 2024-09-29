@@ -252,7 +252,7 @@ int get_window_size(int *rows, int *cols){
 
 //---syntax highlighting---
 int is_separator(int c){
-    return isspace(c) || c == '\0' || strchr(",.()+-/*=~%<>[];", c) != NULL;
+    return isspace(c) || c == '\0' || strchr(",.()+-/*=~%<>[]{}:;", c) != NULL;
 }
 
 void editor_update_syntax(Erow *row){
@@ -1049,7 +1049,10 @@ void editor_process_keypress(){
             break;
 
         default:
-            if (!iscntrl(c)){
+            // characters that should be allowed
+            if (c == '\t'){
+                editor_insert_char(c);
+            }else if (!iscntrl(c)){
                 editor_insert_char(c);
             }
             break;

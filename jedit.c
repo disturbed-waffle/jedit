@@ -27,6 +27,8 @@ enum EditorKey{
     ARROW_RIGHT,
     ARROW_UP,
     ARROW_DOWN,
+    CTRL_LEFT,
+    CTRL_RIGHT,
     DEL_KEY,
     PAGE_UP,
     PAGE_DOWN,
@@ -172,12 +174,25 @@ int editor_read_key(){
     }
 
     if (c == '\x1b'){
-        char seq[3];
+        char seq[5];
 
         if (read(STDIN_FILENO, seq, 1) != 1) return '\x1b';
         if (read(STDIN_FILENO, seq + 1, 1) != 1) return '\x1b';
 
         if (seq[0] == '['){
+            // CTRL ARROWS
+            if (seq[1] == '1'){
+                // Try to read cntrl arrow
+                if (read(STDIN_FILENO, &seq[2], 3) != 3) return '\x1b';
+                if (seq[2] == ';' && seq[3] == '5'){
+                    switch (seq[4]){
+                        case 'D' : return CTRL_LEFT;
+                        case 'C' : return CTRL_RIGHT;
+                        case 'A' : return ARROW_UP;
+                        case 'B' : return ARROW_DOWN;
+                    }
+                }
+            }
             if (seq[1] >= '0' && seq[1] <= '9'){
                 if (read(STDIN_FILENO, &seq[2], 1) != 1) return '\x1b';
                 if (seq[2] == '~'){
@@ -202,7 +217,6 @@ int editor_read_key(){
         return c; 
     }
 }
-
 
 int get_cursor_position(int *rows, int *cols){
     char buf[32];
@@ -1022,13 +1036,22 @@ void editor_process_keypress(){
         case ARROW_RIGHT:
             editor_move_cursor(c);
             break;
+        
+        case CTRL_LEFT:
+            for(int i=0;i<5;i++) editor_move_cursor(ARROW_LEFT);
+            break;
+        case CTRL_RIGHT:
+            for(int i=0;i<5;i++) editor_move_cursor(ARROW_RIGHT);
+            break;
 
         case CTRL_KEY('l'):
         case '\x1b':
             break;
 
         default:
-            editor_insert_char(c);
+            if (!iscntrl(c)){
+                editor_insert_char(c);
+            }
             break;
     }
 

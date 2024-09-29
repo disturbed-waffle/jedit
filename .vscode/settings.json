@@ -4,6 +4,8 @@
         "string_view": "c",
         "format": "c",
         "initializer_list": "c",
-        "span": "c"
+        "span": "c",
+        "fcntl.h": "c",
+        "ioctl.h": "c"
     }
 }

@@ -1,7 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -std=c99
+BIN = jedit
 
-all: jtext
+all: $(BIN)
 
-jtext: jtext.c
-	$(CC) -o jtext jtext.c $(CFLAGS)
+$(BIN): jedit.c
+	$(CC) -o $(BIN) jedit.c $(CFLAGS)

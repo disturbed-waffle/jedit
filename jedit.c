@@ -574,6 +574,13 @@ void editor_insert_new_line(){
     }
     E.cy++;
     E.cx = 0;
+
+    Erow *row = &E.row[E.cy - 1];
+    int indent = 0;
+    while (indent < row->size && (row->chars[indent] == '\t' || row->chars[indent] == ' ')){
+        editor_insert_char(row->chars[indent]);
+        indent++;
+    }
 }
 
 //---file i/o---

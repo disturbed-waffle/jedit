@@ -2,11 +2,17 @@
 #define _BSD_SOURCE
 #define _GNU_SOURCE
 
+#ifdef __APPLE__
+#include <termios.h>
+#endif
+#ifdef __linux__
+#include <termio.h>
+#endif
+
 #include <unistd.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <termio.h>
 #include <time.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -19,7 +25,7 @@
 #define TAB_STOP 4
 #define QUIT_TIMES 1
 
-#define CTRL_KEY(k) ((k) & 0x1f)
+#define CTRL_KEY(k) ((k) & 0x1f) //011111
 
 enum EditorKey{
     BACKSPACE = 127,
@@ -32,6 +38,7 @@ enum EditorKey{
     DEL_KEY,
     PAGE_UP,
     PAGE_DOWN,
+    
 };
 
 enum EditorHighlight{
